@@ -42,12 +42,13 @@ done
 URI="smb://$DOMINIO%5C$USUARIO:$SENHA@$SERVIDOR_IMPRESSORA/$NOME_IMPRESSORA"
 
 echo "Adicionando impressora..."
-lpadmin -p "$NOME_IMPRESSORA" \
--v "$URI" \
--E \
--L "$NOME_IMPRESSORA" \
--m "brother_dcpl5512dn_printer.ppd" 2>/dev/null || lpadmin -p "$NOME_IMPRESSORA" -v "$URI" -E -L "$NOME_IMPRESSORA" -m
-everywhere
+PPD_ARQUIVO=$(find /usr/share/ppd/ -name "*dcpl5512dn*.ppd" | head -n 1)
+
+if [ -f "$PPD_ARQUIVO" ]; then
+lpadmin -p "$NOME_IMPRESSORA" -v "$URI" -E -L "$NOME_IMPRESSORA" -P "$PPD_ARQUIVO"
+else
+lpadmin -p "$NOME_IMPRESSORA" -v "$URI" -E -L "$NOME_IMPRESSORA" -m everywhere
+fi
 
 if [ $? -eq 0 ]; then
 echo ""
