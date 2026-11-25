@@ -116,10 +116,7 @@ if [[ "$TIPO_PACOTE" != "manual" ]]; then
         fi
 
         if [[ "$ATUALIZAR_LISTAS" == true ]]; then
-            if ! apt-get update; then
-                echo "ERRO: não foi possível atualizar a lista de pacotes."
-                exit 1
-            fi
+            apt-get update
         fi
 
         if [[ ${#PACOTES_FALTANDO[@]} -gt 0 ]]; then
